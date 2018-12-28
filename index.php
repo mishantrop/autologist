@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <title>Logisting</title>
   <style>
+    * {
+      font-family: Verdana, tahoma, Arial;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
@@ -25,6 +28,9 @@ $app->run();
 
 <h2>Map</h2>
 <img src="/map.png" alt="map" style="display: block; margin: 20px 0; max-width: 100%;" />
+
+<h2>Distribution</h2>
+<img src="/distribution.png" alt="distribution" style="display: block; margin: 20px 0; max-width: 100%;" />
 
 <h2>Timeline</h2>
 <div style="overflow-x: auto;">

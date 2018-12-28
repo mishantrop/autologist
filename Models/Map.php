@@ -53,11 +53,11 @@ class Map
           $orderCoords[0] + $this->center[0] - 15,
           $orderCoords[1] + $this->center[1] - 15,
           $routeLineColor,
-          count($orders)
+          count($orders) * 3
         );
         $prevCoords = [
-          $orderCoords[0] + $this->center[0] - 15,
-          $orderCoords[1] + $this->center[1] - 15,
+          $orderCoords[0] + $this->center[0],
+          $orderCoords[1] + $this->center[1],
         ];
         $this->drawOrder($mapImage, $order, $prevCoords);
       }

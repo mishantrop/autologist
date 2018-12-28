@@ -4,6 +4,7 @@ namespace Logisting;
 putenv('GDFONTPATH=' . realpath('.'));
 
 include 'Models/Config.php';
+include 'Models/Distribution.php';
 include 'Models/Drawing.php';
 include 'Models/Kitchen.php';
 include 'Models/Map.php';
@@ -28,6 +29,7 @@ class App
     $this->drawing = new Drawing();
     $this->kitchen = new Kitchen();
     $this->map = new Map($config, $this->drawing);
+    $this->distribution = new Distribution($config, $this->drawing);
     $this->routing = new Routing();
     $this->timeline = new Timeline($this->drawing);
 
@@ -85,6 +87,8 @@ class App
     $this->map->saveImage();
     $this->timeline->setRoutes($this->routes);
     $this->timeline->saveImage();
+    $this->distribution->setOrders($this->orders);
+    $this->distribution->saveImage();
     echo $this->outputOrders();
     echo $this->outputRoutes();
   }

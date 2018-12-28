@@ -3,17 +3,25 @@ namespace Logisting;
 
 class Kitchen
 {
-  private $ordersCooking;
+  private $cookingLimit;
   private $ordersCooked;
+  private $ordersCooking;
+  private $ordersQueue;
 
   public function __construct()
   {
-    $this->ordersCooking = [];
+    $this->cookingLimit = 2;
     $this->ordersCooked = [];
+    $this->ordersCooking = [];
+    $this->ordersQueue = [];
   }
 
   public function addOrder(Order $order) {
-    $this->ordersCooking[$order->getId()] = $order;
+    if ($this->getCookingOrdersCount() >= $this->cookingLimit) {
+      $this->ordersQueue[$order->getId()] = $order;
+    } else {
+      $this->ordersCooking[$order->getId()] = $order;
+    }
   }
 
   public function removeOrder(int $orderId)
@@ -36,6 +44,11 @@ class Kitchen
     return count($this->ordersCooked);
   }
 
+  public function getQueueOrdersCount(): int
+  {
+    return count($this->ordersQueue);
+  }
+
   public function getCookedOrders(): array
   {
     return $this->ordersCooked;
@@ -49,14 +62,30 @@ class Kitchen
 
   public function calc(int $currentTime)
   {
-    foreach ($this->ordersCooking as $order) {
-      if ($order->getCookedOn() <= $currentTime) {
-        $this->ordersCooked[$order->getId()] = $order;
-        if (isset($this->ordersCooking[$order->getId()])) {
-          unset($this->ordersCooking[$order->getId()]);
+    // Готовится всё, что должно
+    $cookedCount = $this->subcalc($this->cookingLimit, $currentTime);
+    if ($this->getCookingOrdersCount() >= $this->cookingLimit) {
+
+    }
+    $this->subcalc($this->cookingLimit - $cookedCount, $currentTime);
+  }
+
+  private function subcalc($max, int $currentTime)
+  {
+    // Сколько было приготовлено в текущей итерации
+    $cookedCount = 0;
+    if ($cookedCount <= $max) {
+      foreach ($this->ordersCooking as $order) {
+        if ($order->getCookedOn() <= $currentTime) {
+          $this->ordersCooked[$order->getId()] = $order;
+          if (isset($this->ordersCooking[$order->getId()])) {
+            unset($this->ordersCooking[$order->getId()]);
+            $cookedCount++;
+          }
         }
       }
     }
+    return $cookedCount;
   }
 
   public function removeCookedOrder(Order $order)
